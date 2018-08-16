@@ -6,9 +6,6 @@ const resolve = require('path').resolve;
 const webpack = require('webpack');
 
 module.exports = {
-  entry: {
-    app: resolve('./src/index.js')
-  },
 
   devtool: 'source-map',
 
@@ -17,15 +14,7 @@ module.exports = {
       // Compile ES2015 using buble
       test: /\.js$/,
       loader: 'babel-loader',
-      include: [resolve(__dirname, './src'), resolve(__dirname, './node_modules/mapbox-gl/js/')],
-      options: {
-        presets: ['es2015', 'stage-0', 'react'],
-        plugins: ['transform-runtime', ['transform-flow-strip-types', {
-          helpers: false,
-          polyfill: false,
-          regenerator: true
-        }]]
-      }
+      include: [resolve(__dirname, './src'), resolve(__dirname, './node_modules/mapbox-gl/js/')]
     },
     {
       test: /\.js$/,
@@ -47,10 +36,6 @@ module.exports = {
 
   // Optional: Enables reading mapbox token from environment variable
   plugins: [
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken'])
+    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN'])
   ]
 };
-
-// DELETE THIS LINE WHEN COPYING THIS EXAMPLE FOLDER OUTSIDE OF DECK.GL
-// It enables bundling against src in this repo rather than installed deck.gl module
-module.exports = require('./webpack.config.local')(module.exports);

@@ -11,19 +11,20 @@ import {
   setDepotsBase,
   setAnimatePause,
   setAnimateReverse,
-  setSecPerMin,
+  setSecPerHour,
   setClicked,
   setRoutePaths,
   setDefaultZoom,
   setDefaultPitch,
   setMovesOptionFunc,
   setDepotsOptionFunc,
-  setRainfall,
+  setLoading,
 } from './actions';
 
 import MovesInput from './components/moves-input';
 import DepotsInput from './components/depots-input';
-import XbandDataInput from './components/xbanddata-input';
+import LinemapInput from './components/linemap-input';
+import LoadingIcon from './components/loading-icon';
 import AddMinutesButton from './components/addminutes-button';
 import ElapsedTimeRange from './components/elapsedtime-range';
 import PlayButton from './components/play-button';
@@ -33,18 +34,16 @@ import ForwardButton from './components/forward-button';
 import SimulationDateTime from './components/simulation-date-time';
 import SpeedRange from './components/speed-range';
 import HarmoVisLayers from './components/harmovislayers';
+import HarmoVisNonMapLayers from './components/harmovis-nonmap-layers';
 import MovesLayer from './layers/moves-layer';
+import MovesNonmapLayer from './layers/moves-nonmap-layer';
 import DepotsLayer from './layers/depots-layer';
-import CubeGraphLayer from './layers/cubegraph-layer';
-import XbandmeshLayer from './layers/xbandmesh-layer';
+import FixedPointLayer from './layers/fixed-point-layer';
+import LineMapLayer from './layers/line-map-layer';
 import * as settings from './constants/settings';
 import Container from './containers';
-import baseReducer from './reducers';
-import { connectToHarmowareVis, getContainerProp } from './library';
-
-const reducer = {
-  base: baseReducer
-};
+import reducer from './reducers';
+import { connectToHarmowareVis, getContainerProp, getCombinedReducer } from './library';
 
 const Actions = {
   addMinutes,
@@ -57,14 +56,14 @@ const Actions = {
   setDepotsBase,
   setAnimatePause,
   setAnimateReverse,
-  setSecPerMin,
+  setSecPerHour,
   setClicked,
   setRoutePaths,
   setDefaultZoom,
   setDefaultPitch,
   setMovesOptionFunc,
   setDepotsOptionFunc,
-  setRainfall,
+  setLoading,
 };
 
 export {
@@ -73,7 +72,8 @@ export {
   // components
   MovesInput,
   DepotsInput,
-  XbandDataInput,
+  LinemapInput,
+  LoadingIcon,
   AddMinutesButton,
   PlayButton,
   PauseButton,
@@ -83,18 +83,21 @@ export {
   SpeedRange,
   SimulationDateTime,
   HarmoVisLayers,
+  HarmoVisNonMapLayers,
   // constants
   settings,
   // container
   Container,
   // layers
   MovesLayer,
+  MovesNonmapLayer,
   DepotsLayer,
-  CubeGraphLayer,
-  XbandmeshLayer,
+  FixedPointLayer,
+  LineMapLayer,
   // library
   getContainerProp,
   connectToHarmowareVis,
+  getCombinedReducer,
   // reducer
   reducer
 };

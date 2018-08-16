@@ -11,14 +11,15 @@ type Props = {
   step: number,
   actions: {
     setTime: setTime
-  }
+  },
+  className: string
 }
 
 export default class ElapsedTimeRange extends Component<Props> {
-
   static defaultProps = {
     min: -100,
-    step: 1
+    step: 1,
+    className: ''
   }
 
   setTime(e: InputEvent) {
@@ -26,7 +27,7 @@ export default class ElapsedTimeRange extends Component<Props> {
   }
 
   render() {
-    const { settime, timeLength, min, step } = this.props;
+    const { settime, timeLength, min, step, className } = this.props;
 
     return (
       <input
@@ -34,6 +35,7 @@ export default class ElapsedTimeRange extends Component<Props> {
         value={Math.floor(settime)}
         min={min} max={timeLength} step={step}
         onChange={this.setTime.bind(this)}
+        className={className}
       />
     );
   }

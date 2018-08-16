@@ -3,12 +3,12 @@
 import { CompositeLayer, ScatterplotLayer, GridCellLayer } from 'deck.gl';
 import CubeiconLayer from '../cubeicon-layer';
 import { COLOR4 } from '../../constants/settings';
-import type { DepotsData, DepotsDataItem, LightSettings, Position, Radius, DataOption, Context } from '../../types';
+import type { DepotsData, LightSettings, Position, Radius, DataOption, Context, I18n } from '../../types';
 
 type Props = {
   layerRadiusScale: number,
   layerOpacity: number,
-  depotsData: DepotsData,
+  depotsData: Array<DepotsData>,
   optionVisible: boolean,
   optionChange: boolean,
   optionOpacity: number,
@@ -25,10 +25,10 @@ type Props = {
   getElevation2: (x: any) => number,
   getElevation3: (x: any) => number,
   getElevation4: (x: any) => number,
+  i18n: I18n
 }
 
 export default class DepotsLayer extends CompositeLayer<Props> {
-
   props: Props;
   context: Context;
 
@@ -43,14 +43,17 @@ export default class DepotsLayer extends CompositeLayer<Props> {
     optionElevationScale: 1,
     getColor: (x: DataOption) => x.color || COLOR4,
     getColor1: (x: DataOption) =>
-    (x.optColor && x.optColor[0]) || x.color || COLOR4,
+      (x.optColor && x.optColor[0]) || x.color || COLOR4,
     getColor2: (x: DataOption) => (x.optColor && x.optColor[1]) || x.color || COLOR4,
     getColor3: (x: DataOption) => (x.optColor && x.optColor[2]) || x.color || COLOR4,
     getColor4: (x: DataOption) => (x.optColor && x.optColor[3]) || x.color || COLOR4,
     getElevation1: (x: DataOption) => (x.optElevation && x.optElevation[0]) || 0,
     getElevation2: (x: DataOption) => (x.optElevation && x.optElevation[1]) || 0,
     getElevation3: (x: DataOption) => (x.optElevation && x.optElevation[2]) || 0,
-    getElevation4: (x: DataOption) => (x.optElevation && x.optElevation[3]) || 0
+    getElevation4: (x: DataOption) => (x.optElevation && x.optElevation[3]) || 0,
+    i18n: {
+      error: 'DepotsLayer: props 指定エラー'
+    }
   };
 
   renderLayers() {
@@ -58,11 +61,11 @@ export default class DepotsLayer extends CompositeLayer<Props> {
       getRadius: propGetRadius, optionElevationScale, optionVisible, optionChange,
       optionOpacity, optionCellSize, lightSettings,
       getColor1, getColor2, getColor3, getColor4,
-      getElevation1, getElevation2, getElevation3, getElevation4
+      getElevation1, getElevation2, getElevation3, getElevation4, i18n
     } = this.props;
 
     if (optionVisible && !lightSettings) {
-      alert('DepotsLayer: props 指定エラー');
+      alert(i18n.error);
       return null;
     }
     if (!depotsData) {

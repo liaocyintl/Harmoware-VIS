@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AddMinutesButton, PlayButton, PauseButton, ReverseButton, ForwardButton,
   ElapsedTimeRange, SpeedRange } from 'harmoware-vis';
 import BusStopInfo from './busstop-info';
+import XbandDataInput from './xbanddata-input';
 
 const getXbandLabelBySize = (xbandCellSize) => {
   if (xbandCellSize === 0) {
@@ -26,7 +27,6 @@ const getNextCellSize = (xbandCellSize) => {
 };
 
 export default class Controller extends Component {
-
 /*  constructor() {
     super();
   } */
@@ -56,7 +56,7 @@ export default class Controller extends Component {
       object: { code, name, memo, movesbaseidx },
       layer: { id: 'MovesLayer' }
     };
-    actions.updateRoute(el, true);
+    actions.updateRoute([el], true);
     actions.setSelectedBus(code);
   }
 
@@ -101,7 +101,7 @@ export default class Controller extends Component {
   }
 
   handleChangeFile(e) {
-    const { actions, trailing, secpermin, defaultZoom, defaultPitch } = this.props;
+    const { actions, trailing, defaultZoom, defaultPitch } = this.props;
     const reader = new FileReader();
     const file = e.target.files[0];
     reader.readAsText(file);
@@ -120,11 +120,13 @@ export default class Controller extends Component {
       }
       actions.setAnswer(file.name);
       actions.setBusTripsCsv([]);
+      actions.setBusTripIndex({});
       actions.setMovesBase({ timeBegin, timeLength, bounds, movesbase: busmovesbase });
       actions.setBusMovesBaseDic(busmovesbasedic);
       actions.setRoutePaths([]);
       actions.setBusOption({});
       actions.setBsoptFname('');
+      actions.setArchBase([]);
       actions.setSelectedBusstop('');
       actions.setHovered(null);
       actions.setClicked(null);
@@ -135,9 +137,10 @@ export default class Controller extends Component {
 
   render() {
     const {
-      answer, settime, timeLength, secpermin, xbandCellSize,
+      answer, settime, timeLength, secperhour, xbandCellSize,
       selectedBusstop, selectedBus, answers, date, actions,
       animatePause, animateReverse, xbandFname, getOptionChangeChecked,
+      getArchLayerChangeChecked,
       delayrange, depotsData, movedData, busmovesbasedic
     } = this.props;
 
@@ -160,17 +163,20 @@ export default class Controller extends Component {
           <li><span>オプション表示パターン切替</span>
             <input type="checkbox" onChange={getOptionChangeChecked} />
           </li>
+          <li><span>アーチレイヤ表示切替</span>
+            <input type="checkbox" onChange={getArchLayerChangeChecked} />
+          </li>
           <li>
             <input type="file" accept=".json" onChange={this.handleChangeFile.bind(this)} />
           </li>
           <li>
             {animatePause ?
-              <PlayButton actions={actions} /> :
-              <PauseButton actions={actions} />
+              <PlayButton actions={actions}>⏯️ 　開始　</PlayButton> :
+              <PauseButton actions={actions}>⏯️ 一時停止</PauseButton>
             }&nbsp;
             {animateReverse ?
-              <ForwardButton actions={actions} /> :
-              <ReverseButton actions={actions} />
+              <ForwardButton actions={actions}>▶️ 正再生</ForwardButton> :
+              <ReverseButton actions={actions}>◀️ 逆再生</ReverseButton>
             }
           </li>
           <li>
@@ -184,8 +190,8 @@ export default class Controller extends Component {
             <span>{Math.floor(settime)}&nbsp;秒</span>
           </li>
           <li><span>スピード</span>
-            <SpeedRange secpermin={secpermin} actions={actions} />
-            <span>{secpermin}&nbsp;秒/分</span>
+            <SpeedRange secperhour={secperhour} actions={actions} />
+            <span>{secperhour}&nbsp;秒/時</span>
           </li>
           <li><span>遅延度LV</span>
             <input
@@ -196,6 +202,9 @@ export default class Controller extends Component {
           <li>
             <button onClick={this.setCellSize.bind(this)}>{xBandViewLabel}</button>
             <span>{xbandCellSize ? xbandFname : ''}</span>
+          </li>
+          <li>
+            <XbandDataInput actions={actions} />
           </li>
           <li>
             <span>バス停検索</span>

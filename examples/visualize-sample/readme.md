@@ -7,7 +7,6 @@ Harmoware-VIS を実行する基本的なアプリケーションのサンプル
 ```
 #!shell
  set MAPBOX_ACCESS_TOKEN=XXXXXXXXX
- set MapboxAccessToken=XXXXXXXXXX
 ```
 ## Run visualize-sample
 ```
@@ -18,4 +17,3 @@ npm run visualize-sample
 
 ## Using data
 Harmoware-VISの README.MD を参照して、シュミレーション用データを作成してください。
-当サンプルプログラムフォルダの sampledata フォルダにもサンプルデータがあります。

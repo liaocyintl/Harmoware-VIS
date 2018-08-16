@@ -7,7 +7,6 @@ Harmoware-VIS を使用し、バスの運行情報およびバス停位置情報
 ```
 #!shell
  set MAPBOX_ACCESS_TOKEN=XXXXXXXXX
- set MapboxAccessToken=XXXXXXXXXX
 ```
 ## Run visualize-sample
 ```
@@ -34,7 +33,7 @@ xxxxx-YYYYMMDD.(csv/json)
 データは同一ダイヤＩＤ毎に設定してください。
 また到着順序は「並び順」として昇順に並んでいる必要があります。
 #### "json"形式（その１） データフォーマット
-```json
+```js
 {   "timeBegin":9999999999, //運行シュミレーション開始日時（UNIX時間（秒））
     "timeLength": 99999, //運行シュミレーション開始から終了までの経過時間（秒）
     "bounds": [ //運行シュレーション範囲
@@ -58,7 +57,7 @@ xxxxx-YYYYMMDD.(csv/json)
 }
 ```
 #### "json"形式（その２） データフォーマット
-```json
+```js
 {   "timeBegin":9999999999, //運行シュミレーション開始日時（UNIX時間（秒））
     "timeLength": 99999, //運行シュミレーション開始から終了までの経過時間（秒）
     "bounds": { //運行シュレーション範囲
@@ -102,7 +101,7 @@ xxxxx-YYYYMMDD.(csv/json)
 ### バス運行データリスト
 バス運行データリストは「bus3d」フォルダ直下にファイル名「datalist.json」で作成してください。
 #### ファイルデータフォーマット
-```json
+```js
 {   "children": [
         {file: (運行データファイル名)},・・・・・・
     ],
@@ -112,7 +111,7 @@ xxxxx-YYYYMMDD.(csv/json)
 ### バス停データ
 バス停データファイルは「./BusStopsData/」フォルダにファイル名「busstops.csv」で作成してください。
 #### ファイルデータフォーマット
-```json
+```js
 1行目：停留所コード,停留所名,緯度,経度
 2行目：0001,バスセンター,35.168366,136.884123
 　：
@@ -123,7 +122,7 @@ xxxxx-YYYYMMDD.(csv/json)
 
 系統毎バス停定義データファイルは「./routes/」フォルダにファイル名「busroutes.json」で作成してください。
 #### ファイルデータフォーマット
-```json
+```js
 {
     (系統コード-上下コード(number)): [ //系統コード-上下コードの全パターンを定義する(number) （例: 1810114-1 ）
         (バス停コード(number)),・・・・・・ //バス停コードを停車順に定義する(number) （例: 4101 ）
@@ -135,7 +134,7 @@ xxxxx-YYYYMMDD.(csv/json)
 
 経路データファイルは「./routes/」フォルダにファイル名「routes.json」で作成してください。
 #### ファイルデータフォーマット
-```json
+```js
 {   "dep_station_code": [ //始点バス停コード
         (始点バス停コード(number)),・・・・・・ //始点バス停コードを定義する(number) （例: 4101 ）
     ],
@@ -161,6 +160,12 @@ routeデータの最初は始点バス停位置と、最後は終点バス停位
 ### 拡張情報データ
 バス運行アイコン及びバス停アイコンに拡張情報を反映する立体グラフを付加します。
 
+| optionキー名 | 拡張情報表示説明 |
+| :------------ | :------------ |
+| busmovesoption | バス運行アイコンに立体グラフを付加 |
+| busstopsoption | バス停アイコンに立体グラフを付加 |
+| archoption | バス停間にアーチを表示 |
+
 拡張情報データファイルは「./BusStopsData/」フォルダに作成してください。
 また、作成するファイル名は以下のき命名規則に従ってください。
 ```
@@ -168,7 +173,7 @@ xxxxx-YYYYMMDD-option.json
 ```
 ｘｘｘｘｘ－ＹＹＹＹＭＭＤＤ：対応するバス運行データのファイル名と同じにします。
 #### ファイルデータフォーマット
-```json
+```js
 {   "busmovesoption": { //省略可能
         (ダイヤＩＤ(number)): {
             (バス停コード(number)): { //オプションデータ
@@ -188,7 +193,20 @@ xxxxx-YYYYMMDD-option.json
                 "memo": "表示する文字列" //省略可能
             },・・・・・・
         ],・・・・・・
-    }
+    },
+    "archoption": [ //省略可能
+        {   "diagramId": "99999", // ダイヤＩＤ
+            "sourceDepotsCode": "999", // 起点バス停コード
+            "sourceDepotsOrder": "9", // 起点バス停コード順序
+            "sourceColor": [rrr, ggg, bbb, [aaa]], // 起点色指定(省略可)
+            "targetDepotsCode": "999", // 終点バス停コード
+            "targetDepotsOrder": "9", // 終点バス停コード順序
+            "targetColor": [rrr, ggg, bbb, [aaa]], // 終点色指定(省略可)
+            "color": [rrr, ggg, bbb, [aaa]], // 色指定(省略可) 起点終点色指定が優先
+            "strokeWidth": 99, // 線幅指定(メーター)
+            "memo": "表示する文字列" //省略可能
+        },・・・・・・
+    ]
 }
 ```
 ### xband雨量情報データ
@@ -202,7 +220,7 @@ xxxxx-YYYYMMDD-HHMM.json
 ｘｘｘｘｘ：識別名　対応するバス運行データのファイル名の識別名と同じにします。
 ＹＹＹＹＭＭＤＤ－ＨＨＭＭ：日時　雨量情報データの該当する日時
 #### ファイルデータフォーマット
-```json
+```js
 [   {   "position": [999.9999, 99.9999], //オブジェクト表示する位置（経度、緯度）
         "color": [rrr,ggg,bbb], //オブジェクト表示色
         "elevation": 999.9 //雨量情報

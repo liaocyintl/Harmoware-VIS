@@ -1,37 +1,43 @@
 // @flow
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { Icon } from 'react-icons-kit';
+import { ic_play_circle_outline as icPlayArrow } from 'react-icons-kit/md';
 import type { Node } from 'react';
+import type { I18n } from '../types';
 import typeof { setAnimatePause } from '../actions';
-
 
 type Props = {
   actions: {
     setAnimatePause: setAnimatePause
   },
-  children: Node
+  children: Node,
+  i18n: I18n,
+  className: string
 }
 
 export default class PlayButton extends Component<Props> {
-
   static defaultProps = {
-    children: '⏯️ 開始　　',
+    i18n: {
+      playButtonCaption: '️PLAY'
+    },
+    className: ''
   }
-
-  // static propTypes = {
-  //   actions: PropTypes.objectOf(PropTypes.func).isRequired,
-  //   children: PropTypes.node
-  // }
 
   setAnimatePause() {
     this.props.actions.setAnimatePause(false);
   }
 
   render() {
-    const { children } = this.props;
+    const { children, i18n, className } = this.props;
 
     return (
-      <button onClick={this.setAnimatePause.bind(this)}>{children}</button>
+      <button onClick={this.setAnimatePause.bind(this)} className={className}>
+        {children === undefined ?
+          <span><Icon icon={icPlayArrow} />&nbsp;{i18n.playButtonCaption}</span> :
+          <span>{children}</span>
+        }
+      </button>
     );
   }
 }
