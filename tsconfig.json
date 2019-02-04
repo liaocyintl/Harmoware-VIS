@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+      "sourceMap": true,
+      // TSはECMAScript 5に変換
+      "target": "es5",
+      // TSのモジュールはES Modulesとして出力
+      "module": "es2015",
+      // JSXの書式を有効に設定
+      "jsx": "react",
+      "outDir": "lib",
+      "sourceRoot": "./src",
+      "declaration": true,
+      "moduleResolution": "node",
+      "baseUrl": ".",
+      "paths": {
+        "harmoware-vis": ["src/"]
+      },
+      "lib": [
+      "es2018",
+      "dom"
+      ]
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "bower_components",
+    "jspm_packages",
+    "<outDir>"
+  ]
+}
